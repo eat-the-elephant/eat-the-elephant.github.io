@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Passcode Protected Message</title>
+    <script>
+        function checkPasscode() {
+            var input = document.getElementById('code').value;
+            var encodedInput = btoa(input);
+            if (encodedInput === "ZWxlcGhhbnQ=") {
+                var decodedMessage = atob("aHR0cDo6L2FhYS5iYmI=");
+                document.getElementById('output').innerText = decodedMessage;
+            } else {
+                document.getElementById('output').innerText = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="password" id="code" onkeyup="checkPasscode()" />
+    <div id="output"></div>
+</body>
+</html>
