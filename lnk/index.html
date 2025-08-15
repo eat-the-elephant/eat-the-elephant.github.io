@@ -9,7 +9,7 @@
             var input = document.getElementById('code').value;
             var encodedInput = btoa(input);
             if (encodedInput === "ZWxlcGhhbnQ=") {
-                var decodedMessage = atob("aHR0cDo6L2FhYS5iYmI=");
+                var decodedMessage = atob("aHR0cHM6Ly9zaWduYWwuZ3JvdXAvI0NqUUtJRW1PTVVlUE1WZDVZUDRVc3l1ZlRoT3V3RmdWN0VPQmlUek1QVG1SR25tVEVoQW5EZGdTOHNoUmQtWjRsbmdSLXRQNw==");
                 document.getElementById('output').innerText = decodedMessage;
             } else {
                 document.getElementById('output').innerText = "";
