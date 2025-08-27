@@ -465,7 +465,7 @@
                 const winner = Object.keys(voteCounts).find(candidate => voteCounts[candidate] === maxVotes);
 
                 if (maxVotes > totalVotes / 2) {
-                    const winnerP = document.createElement('p');
+                    const winnerP = document.createElement('winner');
                     winnerP.className = 'font-bold mt-2';
                     winnerP.textContent = `${winner} wins with a majority!`;
                     resultsDiv.appendChild(winnerP);
@@ -534,7 +534,7 @@
             }
 
             if (remainingCandidates.length === 1) {
-                const winnerP = document.createElement('p');
+                const winnerP = document.createElement('winner');
                 winnerP.className = 'font-bold mt-2';
                 winnerP.textContent = `${remainingCandidates[0]} wins!`;
                 resultsDiv.appendChild(winnerP);
