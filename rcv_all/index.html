@@ -137,7 +137,7 @@ Check your Browserslist config to be sure that your targets are set up correctly
                 <button id="start-voting" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Start Voting</button>
                 <button id="save-state" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600">Save</button>
                 <button id="load-state" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">Load</button>
-                <button id="hide-section" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 disabled:bg-gray-300" disabled>Hide</button>
+                <button id="hide-section" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">Hide</button>
             </div>
             <input id="load-file-input" type="file" accept=".json" class="hidden">
         </div>
@@ -155,13 +155,13 @@ Check your Browserslist config to be sure that your targets are set up correctly
                 <ol id="ranking-list" class="list-decimal pl-6"></ol>
             </div>
             <button id="submit-vote" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400" disabled>Submit Vote</button>
-            <button id="reset-ranking" class="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 disabled:bg-gray-300" disabled>Undo</button>
+            <button id="undo-ranking" class="mt-4 ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 disabled:bg-gray-400" disabled>Undo</button>
         </div>
         <div class="bg-white p-6 rounded-lg shadow-md">
             <h2 class="text-xl font-semibold mb-4">Results</h2>
             <div class="flex space-x-2 mb-4">
                 <button id="show-results" class="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 hidden">Show Results</button>
-                <button id="unhide-section" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">UnHide</button>
+                <button id="unhide-section" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">UnHide</button>
             </div>
             <div id="results" class="text-gray-600">
                 <p>No votes submitted yet.</p>
@@ -176,7 +176,6 @@ Check your Browserslist config to be sure that your targets are set up correctly
         let voteCounter = 0;
         let sessionId = null;
         let chartCounter = 0;
-        let votingStarted = false;
         function formatTimestamp(date) {
             const year = date.getFullYear();
             const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -206,6 +205,10 @@ Check your Browserslist config to be sure that your targets are set up correctly
             const voteCountSpan = document.getElementById('vote-count');
             voteCountSpan.textContent = `Total Votes: ${votes.length}`;
         }
+        function updateUndoButton() {
+            const undoButton = document.getElementById('undo-ranking');
+            undoButton.disabled = currentRanking.length === 0;
+        }
         function playSound(type) {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
             const oscillator = ctx.createOscillator();
@@ -227,6 +230,12 @@ Check your Browserslist config to be sure that your targets are set up correctly
         });
         document.getElementById('load-state').addEventListener('click', () => {
             document.getElementById('load-file-input').click();
+        });
+        document.getElementById('hide-section').addEventListener('click', () => {
+            document.getElementById('define-candidates').classList.add('hidden');
+        });
+        document.getElementById('unhide-section').addEventListener('click', () => {
+            document.getElementById('define-candidates').classList.remove('hidden');
         });
         document.getElementById('load-file-input').addEventListener('change', (event) => {
             const file = event.target.files[0];
@@ -307,16 +316,6 @@ Check your Browserslist config to be sure that your targets are set up correctly
             updateUndoButton();
             updateVoteCount();
             document.getElementById('define-candidates').classList.add('hidden');
-            document.getElementById('hide-section').disabled = false;
-            votingStarted = true;
-        });
-        document.getElementById('hide-section').addEventListener('click', () => {
-            if (votingStarted) {
-                document.getElementById('define-candidates').classList.add('hidden');
-            }
-        });
-        document.getElementById('unhide-section').addEventListener('click', () => {
-            document.getElementById('define-candidates').classList.remove('hidden');
         });
         function populateCandidates() {
             const list = document.getElementById('candidate-list');
@@ -365,15 +364,10 @@ Check your Browserslist config to be sure that your targets are set up correctly
             const submitButton = document.getElementById('submit-vote');
             submitButton.disabled = currentRanking.length !== candidates.length;
         }
-        function updateUndoButton() {
-            const undoButton = document.getElementById('reset-ranking');
-            undoButton.disabled = currentRanking.length === 0;
-        }
-        document.getElementById('reset-ranking').addEventListener('click', () => {
+        document.getElementById('undo-ranking').addEventListener('click', () => {
             currentRanking = [];
             populateCandidates();
             updateRankingDisplay();
-            updateVoteCount();
             updateUndoButton();
         });
         document.getElementById('submit-vote').addEventListener('click', () => {
@@ -663,7 +657,6 @@ Check your Browserslist config to be sure that your targets are set up correctly
             }
         }
         updateVoteCount();
-        updateUndoButton();
     </script>
 </body>
 </html>
